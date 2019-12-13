@@ -11,7 +11,10 @@ object UserHolder {
         password: String
     ): User{
         return User.makeUser(fullName, email = email, password = password)
-            .also { user -> map[user.login] = user }
+            .also { user -> map[user.login] = user
+                if (!map.containsKey(user.login)) map[user.login] = user
+                else throw IllegalArgumentException("A user with this email already exists")
+            }
     }
 
     fun loginUser(login:String, password: String): String? {
